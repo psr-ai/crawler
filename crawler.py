@@ -2,14 +2,13 @@ import os, StringIO
 from selenium import webdriver
 from lxml import etree
 from html_lib import clean_soup
-from math_lib import standard_deviation, ljust, transpose
+from math_lib import standard_deviation, ljust, transpose, mean
 
 
 def crawl():
     driver = webdriver.Chrome(os.path.dirname(os.path.abspath(__file__)) + '/dependencies/chromedriver')
-    driver.get("http://www.amazon.in/s/ref=nb_sb_ss_i_4_6?url=search-alias%3Daps&field-keywords=iphone+7&sprefix=iphone%2Caps%2C316&crid=3JK7HCRRBBHHS")
+    driver.get("https://paytm.com/shop/search?q=iphone%207&from=autosuggest&child_site_id=1&site_id=1&category=66781&brand=1707")
     page_source = driver.page_source
-    driver.quit()
 
     clean_page_source = str(clean_soup(page_source))
     # Page Root
@@ -20,12 +19,12 @@ def crawl():
 
     xpaths_and_children = []
     for e in page_source_root.iter():
-        xpaths_and_children.append((element_tree.getpath(e), e.getchildren()))
+        xpaths_and_children.append((element_tree.getelementpath(e), e.getchildren()))
 
     # sorting xpaths in descending order on number of children
     xpaths_and_children = sorted(xpaths_and_children, key=lambda xpath_and_children: len(xpath_and_children[1]), reverse=True)
 
-    most_relevant_dom(xpaths_and_children)
+    most_relevant_dom(xpaths_and_children, element_tree)
 
 
 # Takes source without comments and returns the lxml tree for the same
@@ -35,7 +34,7 @@ def form_root(source):
     return root
 
 
-def most_relevant_dom(elements):
+def most_relevant_dom(elements, element_tree):
 
     distributions = []
     total_distributions = []
@@ -68,18 +67,27 @@ def most_relevant_dom(elements):
             matrix_length = len(sorted_distributions[0])
             padded_sorted_distributions = []
             for sorted_distribution in sorted_distributions:
-                padded_sorted_distributions.append(ljust(sorted_distribution, matrix_length, -1))
+                padded_sorted_distributions.append(ljust(sorted_distribution, matrix_length, -10))
 
             children_matrix_distributions.append((distribution[0], padded_sorted_distributions))
+
+    # Assuming that such elements are having more than 10 children recursively
+    children_matrix_distributions = [children_matrix_distribution for children_matrix_distribution in children_matrix_distributions if len(children_matrix_distribution[1][0]) > 10]
 
     transposed_children_distributions = [(e[0], transpose(e[1]).tolist()) for e in children_matrix_distributions]
 
     sd_distributions = []
     for matrix_distribution in transposed_children_distributions:
-        sd_distributions.append([standard_deviation(count_distribution) for count_distribution in matrix_distribution[1]])
+        sd_distributions.append((matrix_distribution[0], [standard_deviation(count_distribution) for count_distribution in matrix_distribution[1]]))
 
-    print sd_distributions[2]
-    print transposed_children_distributions[2][1]
+    mean_sd_distributions = [(sd_distribution[0], mean(sd_distribution[1])) for sd_distribution in sd_distributions if mean(sd_distribution[1]) > 0]
+
+    for e in mean_sd_distributions:
+        print e
+
+
+
+
 
 
 
@@ -94,6 +102,5 @@ def most_relevant_dom(elements):
 #         if child_element.findall("*").count > 0:
 #             this_level_distribution.append(child_element.findall("*").count)
 #             next_level_elements.push()
-
 
 crawl()
