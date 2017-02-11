@@ -54,14 +54,14 @@ def most_relevant_dom(elements):
             distribution.append(children_at_same_level_counts)
             total_distribution.append(total_children_recursively)
 
-        distributions.append(distribution)
+        distributions.append((element[0], distribution))
         total_distributions.append((element[0], len(element[1]), total_distribution))
 
     # each distribution is recursive children count distribution for each child in parent element
     children_matrix_distributions = []
     for distribution in distributions:
 
-        sorted_distributions = sorted(distribution, key=lambda each_distribution: len(each_distribution), reverse=True)
+        sorted_distributions = sorted(distribution[1], key=lambda each_distribution: len(each_distribution), reverse=True)
 
         if len(sorted_distributions) > 0:
 
@@ -70,10 +70,16 @@ def most_relevant_dom(elements):
             for sorted_distribution in sorted_distributions:
                 padded_sorted_distributions.append(ljust(sorted_distribution, matrix_length, -1))
 
-            children_matrix_distributions.append(padded_sorted_distributions)
+            children_matrix_distributions.append((distribution[0], padded_sorted_distributions))
 
+    transposed_children_distributions = [(e[0], transpose(e[1]).tolist()) for e in children_matrix_distributions]
 
-    # print transpose(children_matrix_distributions[2]).tolist()
+    sd_distributions = []
+    for matrix_distribution in transposed_children_distributions:
+        sd_distributions.append([standard_deviation(count_distribution) for count_distribution in matrix_distribution[1]])
+
+    print sd_distributions[2]
+    print transposed_children_distributions[2][1]
 
 
 
