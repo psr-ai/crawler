@@ -1,0 +1,48 @@
+import os, StringIO
+from selenium import webdriver
+from lxml import etree
+from html_lib import clean_soup
+from math_lib import standard_deviation
+
+
+def crawl():
+    driver = webdriver.Chrome(os.path.dirname(os.path.abspath(__file__)) + '/dependencies/chromedriver')
+    driver.get("http://www.amazon.in/s/ref=nb_sb_ss_i_4_6?url=search-alias%3Daps&field-keywords=iphone+7&sprefix=iphone%2Caps%2C316&crid=3JK7HCRRBBHHS")
+    page_source = driver.page_source
+    driver.quit()
+
+    clean_page_source = str(clean_soup(page_source))
+    # Page Root
+    page_source_root = form_root(clean_page_source)
+
+    # Element tree
+    element_tree = etree.ElementTree(page_source_root)
+
+    xpaths_and_children = []
+    for e in page_source_root.iter():
+        xpaths_and_children.append((element_tree.getpath(e), e.getchildren()))
+
+    # sorting xpaths in descending order on number of children
+    xpaths_and_children = sorted(xpaths_and_children, key=lambda xpath_and_children: len(xpath_and_children[1]), reverse=True)
+
+
+# Takes source without comments and returns the lxml tree for the same
+def form_root(source):
+    parser = etree.XMLParser(recover=True)
+    root = etree.fromstring(source, parser)
+    return root
+
+
+
+
+
+# def child_freq_counts_by_level(elements, distribution=[]):
+#     this_level_distribution = []
+#     next_level_elements = []
+#     for child_element in elements:
+#         if child_element.findall("*").count > 0:
+#             this_level_distribution.append(child_element.findall("*").count)
+#             next_level_elements.push()
+
+
+crawl()
