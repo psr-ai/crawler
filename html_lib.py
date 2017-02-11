@@ -100,13 +100,13 @@ def fetch_dom_by_xpath(tree, xpath):
 
 
 def nodes_and_text(root):
-    root_name = root.get('class') + " " + root.get('id') if root.get('class') and root.get('id') else root.get('class') if root.get('class') else root.get('id') if root.get('id') else 'None'
+    root_name = root.get('class')
     output = {root_name: " ".join(root.itertext())}
     if len(root.getchildren()) > 0:
         for child in root.iterchildren():
             child_nodes_and_text = nodes_and_text(child)
             for key, value in child_nodes_and_text.iteritems():
-                output[root_name + " " + key] = value
+                output[key] = value
 
     return output
     # for child in root.iter():
