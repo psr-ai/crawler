@@ -25,12 +25,40 @@ def crawl():
     # sorting xpaths in descending order on number of children
     xpaths_and_children = sorted(xpaths_and_children, key=lambda xpath_and_children: len(xpath_and_children[1]), reverse=True)
 
+    most_relevant_dom(xpaths_and_children)
+
 
 # Takes source without comments and returns the lxml tree for the same
 def form_root(source):
     parser = etree.XMLParser(recover=True)
     root = etree.fromstring(source, parser)
     return root
+
+
+def most_relevant_dom(elements):
+
+    distributions = []
+    total_distributions = []
+
+    # Looping on all found child elements of the source
+    for element in elements:
+        distribution = []
+        total_distribution = []
+        for child_element in element[1]:
+            total_children_recursively = 0
+            children_at_same_level_counts = []
+            for e in child_element.iter():
+                children_at_same_level_counts.append(len(e.getchildren()))
+                total_children_recursively += 1
+
+            distribution.append(children_at_same_level_counts)
+            total_distribution.append(total_children_recursively)
+
+        distributions.append(distribution)
+        total_distributions.append((element[0], len(element[1]), total_distribution))
+
+    for distribution in distributions:
+        print (distribution)
 
 
 
