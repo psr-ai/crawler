@@ -2,7 +2,7 @@ import os, StringIO
 from selenium import webdriver
 from lxml import etree
 from html_lib import clean_soup
-from math_lib import standard_deviation
+from math_lib import standard_deviation, ljust, transpose
 
 
 def crawl():
@@ -57,8 +57,25 @@ def most_relevant_dom(elements):
         distributions.append(distribution)
         total_distributions.append((element[0], len(element[1]), total_distribution))
 
+    # each distribution is recursive children count distribution for each child in parent element
+    children_matrix_distributions = []
     for distribution in distributions:
-        print (distribution)
+
+        sorted_distributions = sorted(distribution, key=lambda each_distribution: len(each_distribution), reverse=True)
+
+        if len(sorted_distributions) > 0:
+
+            matrix_length = len(sorted_distributions[0])
+            padded_sorted_distributions = []
+            for sorted_distribution in sorted_distributions:
+                padded_sorted_distributions.append(ljust(sorted_distribution, matrix_length, -1))
+
+            children_matrix_distributions.append(padded_sorted_distributions)
+
+
+    # print transpose(children_matrix_distributions[2]).tolist()
+
+
 
 
 
