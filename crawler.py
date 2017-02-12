@@ -3,11 +3,12 @@ from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.common.exceptions import TimeoutException
 from scraper import Scraper
+from config import default_items_to_scrape
 
 
 class Crawler:
 
-    def __init__(self, total_items_to_scrape=240):
+    def __init__(self, total_items_to_scrape=default_items_to_scrape):
         self.driver = webdriver.Chrome(os.path.dirname(os.path.abspath(__file__)) + '/dependencies/chromedriver')
         self.driver_wait = WebDriverWait(self.driver, 5)
         self.scraper = Scraper()
@@ -28,10 +29,9 @@ class Crawler:
                 if self.scraper.total_items > self.total_items_to_scrape:
                     match = True
             except TimeoutException:
-                print "Cannot scroll down more"
-                print "Checking if there is pagination"
+                print "Cannot scroll down more. Checking if there is pagination..."
 
-                next_buttons = self.driver.find_elements_by_xpath("//*[contains(text(), 'Next')]")
+                next_buttons = [elem for elem in self.driver.find_elements_by_xpath("//*[contains(translate(text(),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'), 'next')]") if elem.tag_name != 'script']
 
                 if next_buttons:
                     print "Clicking next button"
@@ -40,7 +40,7 @@ class Crawler:
 
                 else:
                     print "Cannot find pagination. Exiting..."
-                    match = False
+                    match = True
 
             if not match:
 
@@ -51,7 +51,9 @@ class Crawler:
 
             else:
 
-                print "Total items scraped. Exiting..."
+                print "Scraping complete. Exiting..."
+
+        print "Total items scraped: " + str(self.scraper.total_items)
 
 
 
