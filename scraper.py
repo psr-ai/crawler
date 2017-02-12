@@ -21,7 +21,21 @@ class Scraper:
 
     def process_output(self):
 
-        for output_per_page in self.output:
+        concatenated_output = []
+        for result in self.output:
+            concatenated_output += result
+        print len(concatenated_output)
+        all_keys = []
+        result_keys = [result.keys() for result in concatenated_output]
 
-            for output in output_per_page:
-                print output
+        for result_key in result_keys:
+            all_keys += result_key
+
+        for result in concatenated_output:
+            for key in all_keys:
+                if key not in result:
+                    result[key] = ''
+
+        for output in concatenated_output:
+
+            print output

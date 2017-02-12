@@ -94,8 +94,12 @@ class HtmlLib:
         return elements
 
     def nodes_and_text(self, root):
-        root_name = root.get('class')
-        output = {root_name: " ".join(root.itertext())}
+        root_name = root.get('class') if root.get('class') else root.get('id')
+        output = {}
+        text = " ".join(root.itertext()).encode('utf8')
+        if text:
+            output = {root_name: text}
+
         if root.get("href"):
             output["link"] = root.get("href")
         if len(root.getchildren()) > 0:
