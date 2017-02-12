@@ -18,3 +18,7 @@
 7. You can specify the number of desired results in the `run.py` file (`Crawler(total_items_to_scrape=your_desired_number)`)
 8. Run the `run.py` file, utf8 output in console, csv output in output/output.csv
 
+### Magic
+
+>Since the similar elements belong to the same header, we can easily use nlp to rename the headers
+
