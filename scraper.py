@@ -1,4 +1,5 @@
 from html_lib import HtmlLib
+from config import write_to_excel
 
 
 class Scraper:
@@ -29,7 +30,12 @@ class Scraper:
         result_keys = [result.keys() for result in concatenated_output]
 
         for result_key in result_keys:
-            all_keys += result_key
+
+            for key in result_key:
+                if key not in all_keys:
+                    all_keys.append(key)
+
+        all_keys = set(all_keys)
 
         for result in concatenated_output:
             for key in all_keys:
@@ -39,3 +45,5 @@ class Scraper:
         for output in concatenated_output:
 
             print output
+
+        write_to_excel(concatenated_output, all_keys)

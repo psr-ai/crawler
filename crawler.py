@@ -3,13 +3,13 @@ from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.common.exceptions import TimeoutException
 from scraper import Scraper
-from config import default_items_to_scrape
+from config import default_items_to_scrape, current_directory_path
 
 
 class Crawler:
 
     def __init__(self, total_items_to_scrape=default_items_to_scrape):
-        self.driver = webdriver.Chrome(os.path.dirname(os.path.abspath(__file__)) + '/dependencies/chromedriver')
+        self.driver = webdriver.Chrome(current_directory_path + '/dependencies/chromedriver')
         self.driver_wait = WebDriverWait(self.driver, 5)
         self.scraper = Scraper()
         self.total_items_to_scrape = total_items_to_scrape
