@@ -18,3 +18,10 @@ class Scraper:
         self.output[self.current_page_index] += self.html_lib.elements_attribute_map(page_source, from_index=len(self.output[self.current_page_index]))
 
         self.total_items = sum([len(page_items) for page_items in self.output])
+
+    def process_output(self):
+
+        for output_per_page in self.output:
+
+            for output in output_per_page:
+                print output

@@ -96,11 +96,19 @@ class HtmlLib:
     def nodes_and_text(self, root):
         root_name = root.get('class')
         output = {root_name: " ".join(root.itertext())}
+        if root.get("href"):
+            output["link"] = root.get("href")
         if len(root.getchildren()) > 0:
             for child in root.iterchildren():
+                if "link" not in output and child.get("href"):
+                    output["link"] = child.get("href")
                 child_nodes_and_text = self.nodes_and_text(child)
                 for key, value in child_nodes_and_text.iteritems():
-                    output[key] = value
+                    if key == "link":
+                        if "link" not in output:
+                            output["link"] = value
+                    else:
+                        output[key] = value
 
         return output
 

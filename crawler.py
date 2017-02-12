@@ -53,7 +53,7 @@ class Crawler:
 
                 print "Scraping complete. Exiting..."
 
-        print "Total items scraped: " + str(self.scraper.total_items)
+        self.scraper.process_output()
 
 
 
