@@ -10,10 +10,11 @@
 1. Clone the repo
 2. Create a virtual environment (here is the [doc](http://docs.python-guide.org/en/latest/dev/virtualenvs/))
 3. Activate the virtual environment
-4. Navigate to the root directory through terminal
+4. Just in case, I have also committed my virtual env (for Mac) if you want to activate it directly
+5. Navigate to the root directory through terminal
    and execute `pip install requirements.txt`
-5. Edit `run.py` and specify the `url` variable, give the path
+6. Edit `run.py` and specify the `url` variable, give the path
    of first page of results to be extracted
-6. You can specify the number of desired results in the `run.py` file (`Crawler(total_items_to_scrape=your_desired_number)`)
-7. Run the `run.py` file, it outputs as a csv file in output folder in root directory
+7. You can specify the number of desired results in the `run.py` file (`Crawler(total_items_to_scrape=your_desired_number)`)
+8. Run the `run.py` file, it outputs as a csv file in output folder in root directory
 
