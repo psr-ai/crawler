@@ -104,7 +104,7 @@ class HtmlLib:
 
         return output
 
-    def elements_attribute_map(self, page_source):
+    def elements_attribute_map(self, page_source, from_index=0):
 
         clean_page_source = str(self.clean_soup(page_source))
         # Page Root
@@ -118,4 +118,4 @@ class HtmlLib:
 
         wrapper = self.element_tree.find(self.wrapper_xpath)
 
-        return [self.nodes_and_text(elem) for elem in wrapper]
+        return [self.nodes_and_text(elem) for index, elem in enumerate(wrapper) if index >= from_index]
