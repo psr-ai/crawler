@@ -44,6 +44,11 @@ class Scraper:
 
         for output in concatenated_output:
 
-            print output
+            for key in output:
+                print key,
+                print ": ",
+                print output[key],
+
+            print ""
 
         write_to_excel(concatenated_output, all_keys)
