@@ -16,5 +16,5 @@
 6. Edit `run.py` and specify the `url` variable, give the path
    of first page of results to be extracted
 7. You can specify the number of desired results in the `run.py` file (`Crawler(total_items_to_scrape=your_desired_number)`)
-8. Run the `run.py` file, it outputs as a csv file in output folder in root directory
+8. Run the `run.py` file, utf8 output in console, csv output in output/output.csv
 
