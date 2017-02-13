@@ -20,5 +20,5 @@
 
 ### Magic
 
->Since the similar elements belong to the same header, we can easily use nlp to rename the headers
+>Since the similar elements belong to the same key, we can easily use NLP to rename the keys to columns such as Price, Reviews etc
 

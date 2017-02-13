@@ -9,7 +9,7 @@ from config import default_items_to_scrape, current_directory_path
 class Crawler:
 
     def __init__(self, total_items_to_scrape=default_items_to_scrape):
-        self.driver = webdriver.Chrome(current_directory_path + '/dependencies/chromedriver')
+        self.driver = webdriver.Chrome(current_directory_path + '/dependencies/ubuntu/chromedriver')
         self.driver_wait = WebDriverWait(self.driver, 5)
         self.scraper = Scraper()
         self.total_items_to_scrape = total_items_to_scrape
